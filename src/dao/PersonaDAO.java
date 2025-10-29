@@ -1,8 +1,8 @@
 package dao;
 
-import conexion.DBConnection; 
-import modelo.Persona;       
-import java.sql.*;           
+import conexion.DBConnection;
+import java.sql.*;
+import modelo.Persona;           
 
 public class PersonaDAO {
 

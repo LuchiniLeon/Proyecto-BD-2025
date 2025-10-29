@@ -1,19 +1,20 @@
 package modelo;
 
-public class Persona extends Usuario{
+public class Persona extends Usuario {
 
-    // Atributos específicos de la tabla 'persona'
     private int dni;
     private String nombre;
-    private String fechaNac; // Se puede usar String o java.sql.Date
+    private String fechaNac; 
     private int edad; 
 
-    // constructor sin parametros
     public Persona() {
+        super(); // Llama al constructor base de Usuario
     }
 
-    // constructor con parametros 
-    public Persona(int dni, String nombre, String fechaNac, int edad) {
+    // Constructor con los campos del padre (direccion, telefono)
+    public Persona(String direccion, String telefono, int dni, String nombre, String fechaNac, int edad) {
+        super(direccion, telefono); 
+        
         this.dni = dni;
         this.nombre = nombre;
         this.fechaNac = fechaNac;
@@ -61,4 +62,3 @@ public class Persona extends Usuario{
         this.edad = edad;
     }
 }
-
