@@ -1,12 +1,12 @@
-package conexion;
+package conexion; //me genero un error, tengo que solucionarlo
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.SQLException; //para manejar la excepcion en caso de que no encuentre el drive (mas formal)
 
 /**
  * Clase que gestiona la conexión a la base de datos MySQL 
- * con credenciales fijas para el proyecto.
+ * (con valores estaticos onda teorico 9)
  */
 public class DBConnection {
 
@@ -17,18 +17,18 @@ public class DBConnection {
     private static final String PASSWORD = "tu_password"; // agregar tu clave
 
     // SQLException Si hay un error de conexión o driver.
+    //Investigando es necesario ya que no admite si no hay una excepcion
 
     public static Connection getConnection() throws SQLException {
         
         try {
-            // 2. Cargar el driver JDBC (Class.forName)
-            // Esto prepara el driver para el DriverManager (Teórico 9, Pág. 12)
+            //carga el driver de la base de datos si no se cargo.
             Class.forName(DRIVER); 
 
         } catch (ClassNotFoundException e) {
-            // Error si el JAR no está en lib/ o no está configurado en el classpath.
-            System.err.println("ERROR: El driver JDBC (" + DRIVER + ") no fue encontrado.");
-            throw new SQLException("Fallo al cargar el driver JDBC. Verifique la carpeta 'lib/' y el classpath.", e);
+            //error en caso de que no encuentra el drive (verificar carpeta lib en todo caso)
+            System.err.println("ERROR: drive NO encontrado :C .");
+            throw new SQLException("Fallo al cargar el driver JDBC. Verifique la carpeta 'lib/'.", e);
         }
 
         // 3. Obtener la conexión
