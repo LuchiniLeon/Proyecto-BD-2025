@@ -14,11 +14,10 @@ public class PersonaDAO {
         try {
             conn = DBConnection.getConnection(); 
             
-            // 1. INICIO DE TRANSACCIÓN: Desactivar AutoCommit
+            //desactivar autocommit para hacerlo manual
             conn.setAutoCommit(false); 
 
-            // =========================================================================
-            // A. INSERCIÓN EN TABLA PADRE: USUARIO (Obteniendo el ID generado)
+            // con id generado INSERCION tabla padre "usuario"
             String sqlUsuario = "INSERT INTO usuario (direccion, telefono) VALUES (?, ?)";
             stmtUsuario = conn.prepareStatement(sqlUsuario, Statement.RETURN_GENERATED_KEYS);
             stmtUsuario.setString(1, persona.getDireccion());
@@ -26,7 +25,7 @@ public class PersonaDAO {
             
             stmtUsuario.executeUpdate(); 
 
-            // B. OBTENER ID GENERADO 
+            // obtener el id generado
             int nuevoIdUsuario = -1;
             try (ResultSet rs = stmtUsuario.getGeneratedKeys()) { 
                 if (rs.next()) {
@@ -37,8 +36,7 @@ public class PersonaDAO {
                 }
             }
 
-            // =========================================================================
-            // C. INSERCIÓN EN TABLA HIJA: PERSONA
+            // INSERCION tabla hija persona 
             String sqlPersona = "INSERT INTO persona (id_p, dni, nombre, fecha_nac, edad) VALUES (?, ?, ?, ?, ?)";
             stmtPersona = conn.prepareStatement(sqlPersona); 
             
@@ -50,19 +48,19 @@ public class PersonaDAO {
 
             stmtPersona.executeUpdate(); 
 
-            // 2. FIN DE TRANSACCIÓN: Confirmar los cambios
+            //fin transaccion, confirma los cambios
             conn.commit(); 
-            System.out.println("✅ Persona insertada correctamente. ID Generado: " + nuevoIdUsuario);
+            System.out.println("Persona insertada correctamente. ID Generado: " + nuevoIdUsuario);
 
         } catch (SQLException e) {
-            // 3. FALLO: Hacer ROLLBACK
-            System.err.println("❌ Fallo en la transacción de Persona. Intentando Rollback...");
+            // Caso fallo, hacer rollback
+            System.err.println("Fallo en la transacción de Persona. Intentando Rollback...");
             if (conn != null) {
                 conn.rollback(); 
             }
             throw e; 
         } finally {
-            // 4. CIERRE DE RECURSOS
+            // cerramos recursos
             if (stmtPersona != null) stmtPersona.close();
             if (stmtUsuario != null) stmtUsuario.close();
             if (conn != null) {
