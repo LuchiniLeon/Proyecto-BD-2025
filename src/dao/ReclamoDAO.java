@@ -6,10 +6,31 @@ import java.util.ArrayList;
 import java.util.List;
 import modelo.Reclamo;
 
-
-/*Listar los reclamos de un usuario con la cantidad de rellamados*/
-
 public class ReclamoDAO {
+
+    /*Eliminar un reclamo */
+    public int eliminarReclamo(int nroReclamo) throws SQLException {
+        // Usamos PreparedStatement para enviar un DELETE con un parámetro.
+        // La eliminación en cascada y el trigger de auditoría están en el DDL.
+
+        String query = "DELETE FROM reclamo WHERE nro_reclamo = ?";
+        
+        // Uso de try-with-resources para asegurar el cierre automático de Connection y PreparedStatement
+        try (Connection con = DBConnection.getConnection(); 
+             PreparedStatement statement = con.prepareStatement(query)) { 
+            
+            statement.setInt(1, nroReclamo);
+            
+            // executeUpdate se usa para DELETE, retorna el número de registros afectados
+            return statement.executeUpdate(); 
+            
+        } catch (SQLException e) {
+            System.err.println("Error al eliminar reclamo (DAO)");
+            throw e; 
+        }
+    }
+
+    /*Listar los reclamos de un usuario con la cantidad de rellamados*/
 
     public List<Reclamo> listarReclamosConRellamados(int idUsuario) throws SQLException {
         List<Reclamo> listaReclamos = new ArrayList<>();
