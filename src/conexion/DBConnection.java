@@ -11,7 +11,7 @@ import java.sql.SQLException; //para manejar la excepcion en caso de que no encu
 public class DBConnection {
 
     // 1. Parámetros de conexión fijos (Hardcoded)
-    private static final String DRIVER = "org.gjt.mm.mysql.Driver"; 
+    private static final String DRIVER = "org.gjt.mm.mysql.Driver"; //y que es com.mysql.cj.jdbc.Driver
     private static final String URL = "jdbc:mysql://localhost/prueba"; // URL JDBC para MySQL
     private static final String USER = "tu_user";       // agregar tu user 
     private static final String PASSWORD = "tu_password"; // agregar tu clave
