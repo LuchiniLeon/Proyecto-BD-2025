@@ -1,5 +1,6 @@
 USE proyectoBD;
 
+DROP TABLE IF EXISTS reclamosEliminados;
 DROP TABLE IF EXISTS usa;
 DROP TABLE IF EXISTS resuelve;
 DROP TABLE IF EXISTS empresa;
@@ -10,6 +11,7 @@ DROP TABLE IF EXISTS reclamo;
 DROP TABLE IF EXISTS material;
 DROP TABLE IF EXISTS motivo;
 DROP TABLE IF EXISTS usuario;
+
 
 CREATE TABLE usuario(
 id INTEGER AUTO_INCREMENT NOT NULL,
@@ -34,7 +36,8 @@ nombre VARCHAR(50) NOT NULL,
 fecha_nac DATE NOT NULL,
 edad INTEGER NOT NULL,
 CONSTRAINT id_p_pk PRIMARY KEY (id_p),
-CONSTRAINT id_p_fk FOREIGN KEY (id_p) REFERENCES usuario (id) ON DELETE CASCADE
+CONSTRAINT id_p_fk FOREIGN KEY (id_p) REFERENCES usuario (id) ON DELETE CASCADE,
+CONSTRAINT dni_valid CHECK (dni < 1000000000 AND dni > 0)
 );
 
 CREATE TABLE empleado(
@@ -42,8 +45,7 @@ id_em INTEGER NOT NULL,
 dni INTEGER NOT NULL UNIQUE,
 sueldo INTEGER,
 CONSTRAINT id_em_pk PRIMARY KEY (id_em),
-CONSTRAINT id_em_fk FOREIGN KEY (id_em) REFERENCES usuario (id) ON DELETE CASCADE,
-CONSTRAINT dni_valid CHECK (dni < 1000000000 AND dni > 0)
+CONSTRAINT id_em_fk FOREIGN KEY (id_em) REFERENCES usuario (id) ON DELETE CASCADE
 );
 
 CREATE TABLE motivo(
@@ -55,7 +57,7 @@ CONSTRAINT cod_motivo_pk PRIMARY KEY (cod_motivo)
 CREATE TABLE reclamo(
 nro_reclamo INTEGER AUTO_INCREMENT NOT NULL,
 fecha_hora DATETIME,	-- origen del reclamo
-fecha_res DATE NOT NULL, -- fecha de resolucion
+fecha_res DATE, -- fecha de resolucion
 cod_motivo_re INTEGER NOT NULL,
 id_re  INTEGER NOT NULL,
 CONSTRAINT nro_reclamo_pk PRIMARY KEY (nro_reclamo),
