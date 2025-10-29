@@ -10,15 +10,19 @@ import java.sql.SQLException; //para manejar la excepcion en caso de que no encu
  */
 public class DBConnection {
 
-    // 1. Parámetros de conexión fijos (Hardcoded)
-    private static final String DRIVER = "com.mysql.cj.jdbc.Driver"; //y que es com.mysql.cj.jdbc.Driver
-    // Cambia tu URL a esta para usar tu esquema y evitar errores de configuración modernos:
-    private static final String URL = "jdbc:mysql://localhost:3306/proyectoBD?allowPublicKeyRetrieval=true&useSSL=false";   
-    private static final String USER = "root";       // agregar tu user 
-    private static final String PASSWORD = "password"; // agregar tu clave
-
+        // 1. Parámetros de conexión fijos (Hardcoded)
+    private static final String DRIVER = "com.mysql.cj.jdbc.Driver"; // y que es com.mysql.cj.jdbc.Driver url moderno, el del evelia esta ambiguo
+    private static final String URL = "escribir tu url";
+    //url celina: "jdbc:mysql://localhost:3306/proyectoBD"
+    //url leo: "jdbc:mysql://localhost:3306/proyectoBD?allowPublicKeyRetrieval=true&useSSL=false"
+    private static final String USER = "tu_user"; // agregar tu user
+    //user celina y leo : "root"
+    private static final String PASSWORD = "tu_password"; // agregar tu clave
+    //clave celina : "celina"
+    //clave leo : "password"
+    
     // SQLException Si hay un error de conexión o driver.
-    //Investigando es necesario ya que no admite si no hay una excepcion
+    // Investigando es necesario ya que no admite si no hay una excepcion
 
     public static Connection getConnection() throws SQLException {
         
