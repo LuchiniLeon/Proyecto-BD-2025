@@ -1,24 +1,21 @@
 package dao;
 
-import conexion.DBConnection; 
-import modelo.Empresa;       
-import java.sql.*;           
+import conexion.DBConnection;
+import java.sql.*;
+import modelo.Empresa;           
 
 public class EmpresaDAO {
 
-    public void insertarPersona(Empresa empresa) throws SQLException {
+    public void insertarEmpresa(Empresa empresa) throws SQLException { 
         Connection conn = null;
         PreparedStatement stmtUsuario = null;
-        PreparedStatement stmtPersona = null;
+        PreparedStatement stmtEmpresa = null; // Renombramos la variable a stmtEmpresa
 
         try {
             conn = DBConnection.getConnection(); 
-            
-            // 1. INICIO DE TRANSACCIÓN: Desactivar AutoCommit
-            conn.setAutoCommit(false); 
-
-            // =========================================================================
-            // A. INSERCIÓN EN TABLA PADRE: USUARIO (Obteniendo el ID generado)
+            conn.setAutoCommit(false);
+             
+            //insercion tabla usuario
             String sqlUsuario = "INSERT INTO usuario (direccion, telefono) VALUES (?, ?)";
             stmtUsuario = conn.prepareStatement(sqlUsuario, Statement.RETURN_GENERATED_KEYS);
             stmtUsuario.setString(1, empresa.getDireccion());
@@ -26,7 +23,7 @@ public class EmpresaDAO {
             
             stmtUsuario.executeUpdate(); 
 
-            // B. OBTENER ID GENERADO 
+            //obtengo id generado
             int nuevoIdUsuario = -1;
             try (ResultSet rs = stmtUsuario.getGeneratedKeys()) { 
                 if (rs.next()) {
@@ -37,33 +34,30 @@ public class EmpresaDAO {
                 }
             }
 
-            // =========================================================================
-            // C. INSERCIÓN EN TABLA HIJA: PERSONA
-            String sqlPersona = "INSERT INTO empresa (id_e, cuit, capacidad_instalada) VALUES (?, ?, ?)";
-            stmtPersona = conn.prepareStatement(sqlPersona); 
+            //insercion tabla empresa (hija)
+            String sqlEmpresa = "INSERT INTO empresa (id_e, cuit, capacidad_instalada) VALUES (?, ?, ?)"; 
+            stmtEmpresa = conn.prepareStatement(sqlEmpresa); 
+            stmtEmpresa.setInt(1, nuevoIdUsuario); 
+            stmtEmpresa.setLong(2, empresa.getCuit());         // El CUIT es BIGINT
+            stmtEmpresa.setInt(3, empresa.getCapacidadInstalada()); 
             
-            stmtPersona.setInt(1, nuevoIdUsuario); 
-            stmtPersona.setInt(2, persona.getDni());
-            stmtPersona.setString(3, persona.getNombre());
-            stmtPersona.setDate(4, java.sql.Date.valueOf(persona.getFechaNac())); 
-            stmtPersona.setInt(5, persona.getEdad());
+            // se ejecuta en nuevo statement
+            stmtEmpresa.executeUpdate(); 
 
-            stmtPersona.executeUpdate(); 
-
-            // 2. FIN DE TRANSACCIÓN: Confirmar los cambios
+            //confirma los cambios para el fin de transaccion
             conn.commit(); 
-            System.out.println("✅ Persona insertada correctamente. ID Generado: " + nuevoIdUsuario);
+            System.out.println("Empresa insertada correctamente. ID Generado: " + nuevoIdUsuario); 
 
         } catch (SQLException e) {
-            // 3. FALLO: Hacer ROLLBACK
-            System.err.println("❌ Fallo en la transacción de Persona. Intentando Rollback...");
+            // caso fallo: rollback
+            System.err.println("Fallo en la transacción de Empresa. Intentando Rollback...");
             if (conn != null) {
                 conn.rollback(); 
             }
             throw e; 
         } finally {
-            // 4. CIERRE DE RECURSOS
-            if (stmtPersona != null) stmtPersona.close();
+            //cerramos todo
+            if (stmtEmpresa != null) stmtEmpresa.close(); // Referencia a stmtEmpresa
             if (stmtUsuario != null) stmtUsuario.close();
             if (conn != null) {
                 conn.setAutoCommit(true); 
@@ -71,5 +65,4 @@ public class EmpresaDAO {
             }
         }
     }
-}
 }

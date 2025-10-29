@@ -1,11 +1,6 @@
 package modelo;
 
-public class Persona {
-
-    //teniendo en cuenta de los atributos de la entidad
-    private int id; 
-    private String direccion;
-    private String telefono;
+public class Persona extends Usuario{
 
     // Atributos específicos de la tabla 'persona'
     private int dni;
@@ -18,9 +13,7 @@ public class Persona {
     }
 
     // constructor con parametros 
-    public Persona(String direccion, String telefono, int dni, String nombre, String fechaNac, int edad) {
-        this.direccion = direccion;
-        this.telefono = telefono;
+    public Persona(int dni, String nombre, String fechaNac, int edad) {
         this.dni = dni;
         this.nombre = nombre;
         this.fechaNac = fechaNac;
@@ -28,35 +21,6 @@ public class Persona {
     }
 
     //get y sets
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    // direccion
-    
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    // telefono
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
     // dni
 
     public int getDni() {
@@ -97,3 +61,4 @@ public class Persona {
         this.edad = edad;
     }
 }
+
