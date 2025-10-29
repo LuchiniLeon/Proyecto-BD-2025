@@ -5,35 +5,38 @@ import java.sql.DriverManager;
 import java.sql.SQLException; //para manejar la excepcion en caso de que no encuentre el drive (mas formal)
 
 /**
- * Clase que gestiona la conexión a la base de datos MySQL 
+ * Clase que gestiona la conexión a la base de datos MySQL
  * (con valores estaticos onda teorico 9)
  */
 public class DBConnection {
 
     // 1. Parámetros de conexión fijos (Hardcoded)
-    private static final String DRIVER = "com.mysql.cj.jdbc.Driver"; //y que es com.mysql.cj.jdbc.Driver
-    // Cambia tu URL a esta para usar tu esquema y evitar errores de configuración modernos:
-    private static final String URL = "jdbc:mysql://localhost:3306/proyectoBD?allowPublicKeyRetrieval=true&useSSL=false";   
-    private static final String USER = "root";       // agregar tu user 
-    private static final String PASSWORD = "password"; // agregar tu clave
+    private static final String DRIVER = "com.mysql.cj.jdbc.Driver"; // y que es com.mysql.cj.jdbc.Driver
+    // Cambia tu URL a esta para usar tu esquema y evitar errores de configuración
+    // modernos:
+    private static final String URL = "jdbc:mysql://localhost:3306/proyectoBD";
+    private static final String USER = "root"; // agregar tu user
+    private static final String PASSWORD = "celina"; // agregar tu clave
 
     // SQLException Si hay un error de conexión o driver.
-    //Investigando es necesario ya que no admite si no hay una excepcion
+    // Investigando es necesario ya que no admite si no hay una excepcion
 
     public static Connection getConnection() throws SQLException {
-        
+
         try {
-            //carga el driver de la base de datos si no se cargo.
-            Class.forName(DRIVER); 
+            // carga el driver de la base de datos si no se cargo.
+            Class.forName(DRIVER);
 
         } catch (ClassNotFoundException e) {
-            //error en caso de que no encuentra el drive (verificar carpeta lib en todo caso)
+            // error en caso de que no encuentra el drive (verificar carpeta lib en todo
+            // caso)
             System.err.println("ERROR: drive NO encontrado :C .");
             throw new SQLException("Fallo al cargar el driver JDBC. Verifique la carpeta 'lib/'.", e);
         }
 
         // 3. Obtener la conexión
-        // DriverManager.getConnection() retorna la Interface Connection (Teórico 9, Pág. 8)
-        return DriverManager.getConnection(URL, USER, PASSWORD); 
+        // DriverManager.getConnection() retorna la Interface Connection (Teórico 9,
+        // Pág. 8)
+        return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 }

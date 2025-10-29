@@ -7,13 +7,13 @@ import java.sql.SQLException;
 public class Main {
 
     public static void main(String[] args) {
-        
+
         Connection connection = null;
 
         try {
             // Intenta obtener la conexión usando tu gestor
-            connection = DBConnection.getConnection(); 
-            
+            connection = DBConnection.getConnection();
+
             // Si no lanzó excepción, la conexión fue exitosa
             System.out.println("=============================================");
             System.out.println("✅ CONEXIÓN EXITOSA A LA BASE DE DATOS.");
