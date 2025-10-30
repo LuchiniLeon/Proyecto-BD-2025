@@ -16,7 +16,7 @@ public class Persona extends Usuario {
     }
 
     // Constructor con los campos del padre (direccion, telefono)
-    public Persona(String direccion, String telefono, int dni, String nombre, String fechaNac, int edad) {
+    public Persona(String direccion, String telefono, int dni, String nombre, String fechaNac) {
         super(direccion, telefono); 
         
         this.dni = dni;

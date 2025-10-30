@@ -12,12 +12,12 @@ public class DBConnection {
 
         // 1. Parámetros de conexión fijos (Hardcoded)
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver"; // y que es com.mysql.cj.jdbc.Driver url moderno, el del evelia esta ambiguo
-    private static final String URL = "jdbc:mysql://localhost:3306/proyectoBD";
+    private static final String URL = "jdbc:mysql://localhost:3306/proyectoBD?allowPublicKeyRetrieval=true&useSSL=false";
     //url celina y cande: "jdbc:mysql://localhost:3306/proyectoBD"
     //url leo: "jdbc:mysql://localhost:3306/proyectoBD?allowPublicKeyRetrieval=true&useSSL=false"
     private static final String USER = "root"; // agregar tu user
     //user celina y leo : "root"
-    private static final String PASSWORD = "candela"; // agregar tu clave
+    private static final String PASSWORD = "password"; // agregar tu clave
     //clave celina: "celina"
     //clave leo: "password"
     //clave cande: "candela"
