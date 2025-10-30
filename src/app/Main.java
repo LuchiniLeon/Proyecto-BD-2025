@@ -104,12 +104,13 @@ public class Main {
         System.out.print("Fecha Nac. (yyyy-MM-dd): ");
         String fechaNacStr = sc.nextLine();
         
-        
-        // Crea el objeto Modelo
+        // 1. Crea el objeto Modelo: SÓLO se pasan 5 argumentos
         Persona nuevaPersona = new Persona(direccion, telefono, dni, nombre, fechaNacStr);
         
-        
-        // Llama al DAO polimórfico
+        // 2. Muestra la edad calculada (opcional, para verificación)
+        System.out.println("-> Edad calculada automáticamente: " + nuevaPersona.getEdad() + " años."); 
+
+        // 3. Llama al DAO polimórfico
         dao.insertarUsuario(nuevaPersona);
     }
     
@@ -168,7 +169,7 @@ public class Main {
                 System.out.println(r); 
             }
             System.out.println("----------------------------------------");
-
+            
         } catch (SQLException e) {
             System.err.println("Fallo al listar los Reclamos: " + e.getMessage());
         } catch (NumberFormatException e) {

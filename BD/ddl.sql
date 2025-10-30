@@ -1,15 +1,17 @@
 USE proyectoBD;
 
-DROP TABLE IF EXISTS reclamosEliminados;
-DROP TABLE IF EXISTS usa;
+DROP TABLE IF EXISTS reclamosEliminados; -- Ya no tiene FK, pero va primero por seguridad
 DROP TABLE IF EXISTS resuelve;
-DROP TABLE IF EXISTS empresa;
-DROP TABLE IF EXISTS persona;
-DROP TABLE IF EXISTS empleado;
+DROP TABLE IF EXISTS usa;
 DROP TABLE IF EXISTS rellamado;
+
+DROP TABLE IF EXISTS empleado;
+DROP TABLE IF EXISTS persona;
+DROP TABLE IF EXISTS empresa;
 DROP TABLE IF EXISTS reclamo;
-DROP TABLE IF EXISTS material;
 DROP TABLE IF EXISTS motivo;
+DROP TABLE IF EXISTS material;
+
 DROP TABLE IF EXISTS usuario;
 
 
@@ -101,7 +103,6 @@ CREATE TABLE reclamosEliminados(
 nro_reclamo_el INTEGER NOT NULL,
 fecha_eliminacion DATE NOT NULL,
 usuario VARCHAR(50),
-CONSTRAINT nro_reclamo_fkey FOREIGN KEY (nro_reclamo_el) REFERENCES reclamo (nro_reclamo), 
 CONSTRAINT nro_fecha_us_pk PRIMARY KEY (nro_reclamo_el, fecha_eliminacion, usuario)
 );
 
