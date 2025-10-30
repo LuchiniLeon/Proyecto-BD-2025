@@ -2,13 +2,15 @@ package dao;
 
 import conexion.DBConnection;
 import java.sql.*;
-import modelo.Persona;           
+import modelo.Persona;
+import modelo.Usuario;           
 
 public class PersonaDAO {
+    private UsuarioDAO usuario = new UsuarioDAO();
+    Usuario us;
 
     public void insertarPersona(Persona persona) throws SQLException {
         Connection conn = null;
-        PreparedStatement stmtUsuario = null;
         PreparedStatement stmtPersona = null;
 
         try {
@@ -17,30 +19,17 @@ public class PersonaDAO {
             //desactivar autocommit para hacerlo manual
             conn.setAutoCommit(false); 
 
-            // con id generado INSERCION tabla padre "usuario"
-            String sqlUsuario = "INSERT INTO usuario (direccion, telefono) VALUES (?, ?)";
-            stmtUsuario = conn.prepareStatement(sqlUsuario, Statement.RETURN_GENERATED_KEYS);
-            stmtUsuario.setString(1, persona.getDireccion());
-            stmtUsuario.setString(2, persona.getTelefono());
-            
-            stmtUsuario.executeUpdate(); 
+            // Inserta en tabla usuario primero
+            us.setDireccion(persona.getDireccion());
+            us.setTelefono(persona.getTelefono());
 
-            // obtener el id generado
-            int nuevoIdUsuario = -1;
-            try (ResultSet rs = stmtUsuario.getGeneratedKeys()) { 
-                if (rs.next()) {
-                    nuevoIdUsuario = rs.getInt(1); 
-                    persona.setId(nuevoIdUsuario); 
-                } else {
-                    throw new SQLException("Error al obtener el ID generado para el usuario.");
-                }
-            }
+            int idPersona = usuario.insertarUsuario(us);
 
             // INSERCION tabla hija persona 
             String sqlPersona = "INSERT INTO persona (id_p, dni, nombre, fecha_nac, edad) VALUES (?, ?, ?, ?, ?)";
             stmtPersona = conn.prepareStatement(sqlPersona); 
             
-            stmtPersona.setInt(1, nuevoIdUsuario); 
+            stmtPersona.setInt(1, idPersona); 
             stmtPersona.setInt(2, persona.getDni());
             stmtPersona.setString(3, persona.getNombre());
             stmtPersona.setDate(4, java.sql.Date.valueOf(persona.getFechaNac())); 
@@ -50,7 +39,7 @@ public class PersonaDAO {
 
             //fin transaccion, confirma los cambios
             conn.commit(); 
-            System.out.println("Persona insertada correctamente. ID Generado: " + nuevoIdUsuario);
+            System.out.println("Persona insertada correctamente. ID Generado: " + idPersona);
 
         } catch (SQLException e) {
             // Caso fallo, hacer rollback
@@ -62,7 +51,6 @@ public class PersonaDAO {
         } finally {
             // cerramos recursos
             if (stmtPersona != null) stmtPersona.close();
-            if (stmtUsuario != null) stmtUsuario.close();
             if (conn != null) {
                 conn.setAutoCommit(true); 
                 conn.close();

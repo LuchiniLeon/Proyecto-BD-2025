@@ -1,5 +1,9 @@
 package modelo;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+
 public class Persona extends Usuario {
 
     private int dni;
@@ -12,15 +16,21 @@ public class Persona extends Usuario {
     }
 
     // Constructor con los campos del padre (direccion, telefono)
-    public Persona(String direccion, String telefono, int dni, String nombre, String fechaNac, int edad) {
+    public Persona(String direccion, String telefono, int dni, String nombre, String fechaNac) {
         super(direccion, telefono); 
         
         this.dni = dni;
         this.nombre = nombre;
         this.fechaNac = fechaNac;
-        this.edad = edad;
+        this.edad = calcularEdad();
     }
 
+    private int calcularEdad(){
+        DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd"); //Formatea el string con el patrón entre comillas
+        LocalDate fNac = LocalDate.parse(fechaNac,f); //Convierte la fecha de nacimiento (string) en un día
+        LocalDate fActual = LocalDate.now(); //Obtiene la fecha actual del sistema
+        return Period.between(fNac, fActual).getYears(); // retorna la edad
+    }
     //get y sets
     // dni
 
@@ -50,6 +60,7 @@ public class Persona extends Usuario {
 
     public void setFechaNac(String fechaNac) {
         this.fechaNac = fechaNac;
+        this.edad = calcularEdad();
     }
 
     // edad
@@ -58,7 +69,4 @@ public class Persona extends Usuario {
         return edad;
     }
 
-    public void setEdad(int edad) {
-        this.edad = edad;
-    }
 }

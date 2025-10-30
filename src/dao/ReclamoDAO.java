@@ -37,6 +37,7 @@ public class ReclamoDAO {
 
         //LEFT JOIN para incluir reclamos sin rellamados (COUNT = 0).
         //GROUP BY para agrupar por cada reclamo.
+
         String sql = "SELECT " +
                      "r.nro_reclamo, r.fecha_hora, r.fecha_res, " +
                      "COUNT(l.nro_llamado) AS cantidad_rellamados " +
