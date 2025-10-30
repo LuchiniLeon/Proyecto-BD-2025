@@ -2,42 +2,30 @@ package dao;
 
 import conexion.DBConnection;
 import java.sql.*;
-import modelo.Empresa;           
+import modelo.Empresa;
+import modelo.Usuario;           
 
 public class EmpresaDAO {
+    private UsuarioDAO usuario = new UsuarioDAO();
+    Usuario us;
 
     public void insertarEmpresa(Empresa empresa) throws SQLException { 
         Connection conn = null;
-        PreparedStatement stmtUsuario = null;
         PreparedStatement stmtEmpresa = null; // Renombramos la variable a stmtEmpresa
 
         try {
             conn = DBConnection.getConnection(); 
             conn.setAutoCommit(false);
              
-            //insercion tabla usuario
-            String sqlUsuario = "INSERT INTO usuario (direccion, telefono) VALUES (?, ?)";
-            stmtUsuario = conn.prepareStatement(sqlUsuario, Statement.RETURN_GENERATED_KEYS);
-            stmtUsuario.setString(1, empresa.getDireccion());
-            stmtUsuario.setString(2, empresa.getTelefono());
-            
-            stmtUsuario.executeUpdate(); 
+            us.setDireccion(empresa.getDireccion());
+            us.setTelefono(empresa.getTelefono());
 
-            //obtengo id generado
-            int nuevoIdUsuario = -1;
-            try (ResultSet rs = stmtUsuario.getGeneratedKeys()) { 
-                if (rs.next()) {
-                    nuevoIdUsuario = rs.getInt(1); 
-                    empresa.setId(nuevoIdUsuario); 
-                } else {
-                    throw new SQLException("Error al obtener el ID generado para el usuario.");
-                }
-            }
+            int idEmpresa = usuario.insertarUsuario(us);
 
             //insercion tabla empresa (hija)
             String sqlEmpresa = "INSERT INTO empresa (id_e, cuit, capacidad_instalada) VALUES (?, ?, ?)"; 
             stmtEmpresa = conn.prepareStatement(sqlEmpresa); 
-            stmtEmpresa.setInt(1, nuevoIdUsuario); 
+            stmtEmpresa.setInt(1, idEmpresa); 
             stmtEmpresa.setLong(2, empresa.getCuit());         // El CUIT es BIGINT
             stmtEmpresa.setInt(3, empresa.getCapacidadInstalada()); 
             
@@ -46,7 +34,7 @@ public class EmpresaDAO {
 
             //confirma los cambios para el fin de transaccion
             conn.commit(); 
-            System.out.println("Empresa insertada correctamente. ID Generado: " + nuevoIdUsuario); 
+            System.out.println("Empresa insertada correctamente. ID Generado: " + idEmpresa); 
 
         } catch (SQLException e) {
             // caso fallo: rollback
@@ -57,8 +45,7 @@ public class EmpresaDAO {
             throw e; 
         } finally {
             //cerramos todo
-            if (stmtEmpresa != null) stmtEmpresa.close(); // Referencia a stmtEmpresa
-            if (stmtUsuario != null) stmtUsuario.close();
+            if (stmtEmpresa != null) stmtEmpresa.close(); // Referencia a stmtEmpres
             if (conn != null) {
                 conn.setAutoCommit(true); 
                 conn.close();
