@@ -2,12 +2,10 @@ package dao;
 
 import conexion.DBConnection;
 import java.sql.*;
-import modelo.Empresa;
-import modelo.Usuario;           
+import modelo.Empresa;        
 
 public class EmpresaDAO {
     private UsuarioDAO usuario = new UsuarioDAO();
-    Usuario us;
 
     public void insertarEmpresa(Empresa empresa) throws SQLException { 
         Connection conn = null;
@@ -17,10 +15,7 @@ public class EmpresaDAO {
             conn = DBConnection.getConnection(); 
             conn.setAutoCommit(false);
              
-            us.setDireccion(empresa.getDireccion());
-            us.setTelefono(empresa.getTelefono());
-
-            int idEmpresa = usuario.insertarUsuario(us);
+            int idEmpresa = usuario.insertarUsuario(empresa);
 
             //insercion tabla empresa (hija)
             String sqlEmpresa = "INSERT INTO empresa (id_e, cuit, capacidad_instalada) VALUES (?, ?, ?)"; 

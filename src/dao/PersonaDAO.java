@@ -3,11 +3,10 @@ package dao;
 import conexion.DBConnection;
 import java.sql.*;
 import modelo.Persona;
-import modelo.Usuario;           
 
 public class PersonaDAO {
     private UsuarioDAO usuario = new UsuarioDAO();
-    Usuario us;
+
 
     public void insertarPersona(Persona persona) throws SQLException {
         Connection conn = null;
@@ -20,10 +19,7 @@ public class PersonaDAO {
             conn.setAutoCommit(false); 
 
             // Inserta en tabla usuario primero
-            us.setDireccion(persona.getDireccion());
-            us.setTelefono(persona.getTelefono());
-
-            int idPersona = usuario.insertarUsuario(us);
+            int idPersona = usuario.insertarUsuario(persona);
 
             // INSERCION tabla hija persona 
             String sqlPersona = "INSERT INTO persona (id_p, dni, nombre, fecha_nac, edad) VALUES (?, ?, ?, ?, ?)";
