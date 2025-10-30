@@ -2,6 +2,8 @@ package app;
 
 import dao.ReclamoDAO;
 import dao.UsuarioDAO;
+import dao.PersonaDAO;
+import dao.EmpresaDAO;
 import java.sql.SQLException;
 import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
@@ -19,6 +21,8 @@ public class Main {
         
         UsuarioDAO usuarioDAO = new UsuarioDAO(); 
         ReclamoDAO reclamoDAO = new ReclamoDAO();
+        EmpresaDAO empresaDAO = new EmpresaDAO();
+        PersonaDAO personaDAO = new PersonaDAO();
 
         int opcion = 0;
 
@@ -30,7 +34,7 @@ public class Main {
 
                 switch (opcion) {
                     case 1:
-                        seleccionarTipoUsuario(scanner, usuarioDAO); 
+                        seleccionarTipoUsuario(scanner, usuarioDAO, personaDAO, empresaDAO); 
                         break;
                     case 2:
                         eliminarReclamo(scanner, reclamoDAO);       
@@ -66,7 +70,7 @@ public class Main {
     
     //inserciones
     
-    private static void seleccionarTipoUsuario(Scanner sc, UsuarioDAO dao) {
+    private static void seleccionarTipoUsuario(Scanner sc, UsuarioDAO dao, PersonaDAO per, EmpresaDAO em) {
         System.out.println("\n - 1. Insertar Usuario -");
         System.out.println("1) Insertar Persona"); 
         System.out.println("2) Insertar Empresa"); 
@@ -76,9 +80,9 @@ public class Main {
             int tipo = Integer.parseInt(sc.nextLine().trim());
 
             if (tipo == 1) {
-                insertarPersona(sc, dao);
+                insertarPersonaMain(sc, dao, per);
             } else if (tipo == 2) {
-                insertarEmpresa(sc, dao);
+                insertarEmpresaMain(sc, dao, em);
             } else {
                 System.err.println("Opción de tipo de usuario no válida.");
             }
@@ -92,7 +96,7 @@ public class Main {
         }
     }
 
-    private static void insertarPersona(Scanner sc, UsuarioDAO dao) throws SQLException, DateTimeParseException, NumberFormatException {
+    private static void insertarPersonaMain(Scanner sc, UsuarioDAO dao, PersonaDAO per) throws SQLException, DateTimeParseException, NumberFormatException {
         System.out.print("Dirección: ");
         String direccion = sc.nextLine();
         System.out.print("Teléfono: ");
@@ -111,10 +115,10 @@ public class Main {
         System.out.println("-> Edad calculada automáticamente: " + nuevaPersona.getEdad() + " años."); 
 
         // 3. Llama al DAO polimórfico
-        dao.insertarUsuario(nuevaPersona);
+        per.insertarPersona(nuevaPersona);
     }
     
-    private static void insertarEmpresa(Scanner sc, UsuarioDAO dao) throws SQLException, NumberFormatException {
+    private static void insertarEmpresaMain(Scanner sc, UsuarioDAO dao, EmpresaDAO em) throws SQLException, NumberFormatException {
         System.out.print("Dirección: ");
         String direccion = sc.nextLine();
         System.out.print("Teléfono: ");
@@ -127,7 +131,8 @@ public class Main {
 
         // crea el objeto modelo
         Empresa nuevaEmpresa = new Empresa(direccion, telefono, cuit, capacidadInstalada);
-        dao.insertarUsuario(nuevaEmpresa); 
+        
+        em.insertarEmpresa(nuevaEmpresa);
     }
     
     private static void eliminarReclamo(Scanner sc, ReclamoDAO dao) {

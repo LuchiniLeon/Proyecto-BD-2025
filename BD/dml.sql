@@ -84,11 +84,11 @@ INSERT INTO persona (id_p, dni, nombre, fecha_nac, edad) VALUES
 
 -- EMPLEADO (id: 4, 6, 8, 9)
 
-INSERT INTO empleado (id_em, dni, sueldo) VALUES
-(4, 22555444, 720000), -- e1: Marta
-(6, 28000111, 900000), -- e2: Ricardo
-(8, 35000999, 650000), -- e3: Sofía
-(9, 21999888, 780000); -- e4: Pedro
+INSERT INTO empleado (id_em, sueldo) VALUES
+(4, 720000), -- e1: Marta
+(6, 900000), -- e2: Ricardo
+(8, 650000), -- e3: Sofía
+(9, 780000); -- e4: Pedro
 
 -- EMPRESA (id: 7, 16, 17)
 
